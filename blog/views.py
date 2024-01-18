@@ -1,11 +1,15 @@
-from django.shortcuts import render
-from django.views.generic import ListView
+
+from django.views.generic import ListView, DetailView
 from .models import Post
 
 class PostList(ListView):
     model = Post
     ordering = '-pk' #게시물 최신 순으로 보기 설정
     #template_name = 'blog/post_list.html'
+
+class PostDetail(DetailView):
+    model = Post
+
 # Create your views here.
 """def index(request):
     posts = Post.objects.all().order_by('-pk') #최신순으로 보기
@@ -23,7 +27,7 @@ def single_post_page(request, pk):
 
     return render(
         request,
-        'blog/single_post_page.html', #해당 파일 반환
+        'blog/post_detail.html', #해당 파일 반환
         {
             'post': post
         }
