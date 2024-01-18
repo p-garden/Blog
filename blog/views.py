@@ -11,3 +11,14 @@ def index(request):
 
         }
     )
+
+def single_post_page(request, pk):
+    post = Post.objects.get(pk=pk)   #해당 pk값을 만족하는 레코드를 가져옴
+
+    return render(
+        request,
+        'blog/single_post_page.html', #해당 파일 반환
+        {
+            'post': post
+        }
+    )
