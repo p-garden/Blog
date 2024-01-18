@@ -1,16 +1,22 @@
 from django.shortcuts import render
+from django.views.generic import ListView
 from .models import Post
 
+class PostList(ListView):
+    model = Post
+    ordering = '-pk' #게시물 최신 순으로 보기 설정
+    #template_name = 'blog/post_list.html'
 # Create your views here.
-def index(request):
-    posts = Post.objects.all().order_by('-pk')
+"""def index(request):
+    posts = Post.objects.all().order_by('-pk') #최신순으로 보기
     return render(
         request,
-        'blog/index.html', #blog 폴더의 템플릿중 index파일을 반환
+        'blog/post_list.html', #blog 폴더의 템플릿중 index파일을 반환
         {'posts': posts
 
         }
-    )
+    )"""
+
 
 def single_post_page(request, pk):
     post = Post.objects.get(pk=pk)   #해당 pk값을 만족하는 레코드를 가져옴
