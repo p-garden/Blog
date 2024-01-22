@@ -78,7 +78,7 @@
                     <!-- Blog post-->
                     {% for p in post_list %}
                     <div class="card mb-4">
-                        <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
+                        <a href="#!"><img class="card-img-top" src="{{p.head_image.url}}" alt="Card image cap" /></a>
                         <div class="card-body">
                             <h2 class="card-title ">{{ p.title }}</h2>
                             <p class="card-text">{{ p.content }}</p>
