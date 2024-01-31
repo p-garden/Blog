@@ -59,7 +59,7 @@ class TestView(TestCase):
     def test_post_detail(self):
         #1-1 포스트가 하나 있다.
         post_001 = Post.objects.create( #포스트 하나 만들기기
-           title = '첫 번째 포스트 입니다.',
+            title = '첫 번째 포스트 입니다.',
             content = 'Hello World. We are the world.',
         )
 
