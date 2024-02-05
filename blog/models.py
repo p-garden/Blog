@@ -3,6 +3,14 @@ from django.contrib.auth.models import User
 import os
 # Create your models here.
 
+class Category(models.Model):
+    name=models.CharField(max_length=50, unique=True) #카테고리 이름 중복X
+    slug=models.SlugField(max_length=200, unique=True, allow_unicode=True) #텍스트로된 URL 한글도 가능하게 설정
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name_plural = 'Categories' #복수형 이름 'categorys' -> 'categories'로 수정하기
 
 class Post(models.Model):
     title = models.CharField(max_length=30)
@@ -15,6 +23,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     author= models.ForeignKey(User,null=True, on_delete=models.SET_NULL)  #해당 유저 삭제되면 게시물의 작성자는 빈칸
+    category = models.ForeignKey(Category, null=True,blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f'[{self.pk}]{self.title} :: {self.author}'

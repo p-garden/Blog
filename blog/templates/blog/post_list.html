@@ -4,13 +4,18 @@
        {%if post_list.exists%}
        <!-- Blog post-->
        {% for p in post_list %}
-       <div class="card mb-4">
+       <div class="card mb-4" id="post-{{p.pk}}">
            {% if p.head_image %}
             <a href="#!"><img class="card-img-top" src="{{p.head_image.url}}" alt="Card image cap" /></a>
            {% else %}
            <img class = "card-img-top" src = "https://picsum.photos/seed/{{p.id}}/800/200" alt="random_image">
            {% endif%}
            <div class="card-body">
+               {%if p.category %}
+               <span class ="badge badge-secondary float-right">{{p.category}}</span>
+               {% else %}
+               <span class="badge badge-secondary float-right">미분류 </span>
+               {% endif %}
                <h2 class="card-title ">{{ p.title }}</h2>
                {% if p.hook_text %}
                <h5 class = "text-muted"> {{p.hook_text}}</h5>

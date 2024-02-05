@@ -1,6 +1,6 @@
 
 from django.views.generic import ListView, DetailView
-from .models import Post
+from .models import Post, Category
 
 
 class PostList(ListView):
@@ -8,6 +8,11 @@ class PostList(ListView):
     ordering = '-pk' #게시물 최신 순으로 보기 설정
     #template_name = 'blog/post_list.html'
 
+    def get_context_data(self, **kwargs):
+        context= super(PostList, self).get_context_data()
+        context['categories'] = Category.objects.all()
+        context['no_category_post_count']=Post.objects.filter(category=None).count()
+        return context
 class PostDetail(DetailView):
     model = Post
 
