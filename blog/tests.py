@@ -1,12 +1,14 @@
 from django.test import TestCase, Client
 from bs4 import BeautifulSoup #html요소 다루는 라이브러리
+from django.contrib.auth.models import User
 from .models import Post
 
 # Create your tests here.
 class TestView(TestCase):
     def setUp(self):
         self.client = Client()
-
+        self.user_PG = User.objects.create_user(username='PG', password='wjddnjs0418')
+        self.user_SC = User.objects.create_user(username='SC', password='wjddnjs0418')
     def navbar_test(self, soup):
         navbar = soup.nav
         self.assertIn('Blog', navbar.text)
@@ -55,10 +57,12 @@ class TestView(TestCase):
         post_001= Post.objects.create(   #포스트2개가 잘 생성되었는지 확인
             title = '첫 번째 포스트입니다. ',
             content = 'Hello World, We are the world.',
+            author = self.user_PG
         )
         post_002 = Post.objects.create(
             title = '두번째 포스트입니다.',
             content='1등이 전부는 아니잖아요?',
+            author = self.user_SC
         )
         self.assertEqual(Post.objects.count(), 2)
 
@@ -75,11 +79,15 @@ class TestView(TestCase):
         #3-4 '아직 게시물이 없습니다'라는 문구는 더이상 보이지 않음
         self.assertNotIn('아직 게시물이 없습니다.', main_area.text) #포스트 생성되었으면 해당문구는 없어야함\
 
+        self.assertIn(self.user_PG.username.upper(), main_area.text)
+        self.assertIn(self.user_SC.username.upper(), main_area.text)
+
     def test_post_detail(self):
         #1-1 포스트가 하나 있다.
         post_001 = Post.objects.create( #포스트 하나 만들기기
             title = '첫 번째 포스트 입니다.',
             content = 'Hello World. We are the world.',
+            author = self.user_PG,
         )
 
         #1-2 그 포스트의 url은 'blog/1/'이다.
@@ -104,7 +112,9 @@ class TestView(TestCase):
         main_area = soup.find('div', id = 'main-area')
         post_area =main_area.find('div', id = 'post-area')
         self.assertIn(post_001.title, post_area.text)
-        #2-5 첫번째 포스트의 작성자가 포스트 영역에있다.(아직X)
+
+        #2-5 첫번째 포스트의 작성자가 포스트 영역에있다.
+        self.assertIn(self.user_PG.username.upper(), post_area.text)
 
         #2-6 첫번째 포스트의 내용이 포스트 영역에 있다.
         self.assertIn(post_001.content, post_area.text)
