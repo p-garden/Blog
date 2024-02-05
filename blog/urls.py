@@ -5,4 +5,5 @@ urlpatterns= [
     #path('', views.index),    #views파일의 index 함수 참조
     path('', views.PostList.as_view()),
     path('<int:pk>/', views.PostDetail.as_view()),
+    path('category/<str:slug>/', views.category_page),
 ]
