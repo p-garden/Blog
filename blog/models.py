@@ -16,6 +16,18 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories' #복수형 이름 'categorys' -> 'categories'로 수정하기
 
+class Tag(models.Model):
+    name=models.CharField(max_length=50)
+    slug=models.SlugField(max_length=200, unique=True, allow_unicode=True) #텍스트로된 URL 한글도 가능하게 설정
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return f'/blog/tag/{self.slug}/'
+
+
+
 class Post(models.Model):
     title = models.CharField(max_length=30)
     hook_text = models.CharField(max_length=100, blank=True)
@@ -28,6 +40,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     author= models.ForeignKey(User,null=True, on_delete=models.SET_NULL)  #해당 유저 삭제되면 게시물의 작성자는 빈칸
     category = models.ForeignKey(Category, null=True,blank=True, on_delete=models.SET_NULL)
+    tags= models.ManyToManyField(Tag, blank=True)
 
     def __str__(self):
         return f'[{self.pk}]{self.title} :: {self.author}'
