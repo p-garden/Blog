@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post, Category, Tag
 
 
@@ -58,6 +59,21 @@ def tag_page(request, slug):
             'tag': tag,
         }
     )
+
+class PostCreate(LoginRequiredMixin,CreateView):
+    model = Post
+    fields = ['title', 'hook_text', 'content', 'head_image', 'file_upload', 'category']
+
+    def form_valid(self, form):
+        current_user = self.request.user #웹사이트의 방문자
+        if current_user.is_authenticated:    #로그인 된 경우
+            form.instance.author = current_user
+            return super(PostCreate, self).form_valid(form) #새로 작성한 포스트의 author필드에 현재 방문자 담기
+        else:
+            return redirect('/blog/') #로그인 안된 경우는 원래 블로그 페이지로 돌려 보내기
+
+
+
 # Create your views here.
 """def index(request):
     posts = Post.objects.all().order_by('-pk') #최신순으로 보기
