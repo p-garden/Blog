@@ -10,6 +10,9 @@ class TestView(TestCase):
         self.user_PG = User.objects.create_user(username='PG', password='wjddnjs0418')
         self.user_SC = User.objects.create_user(username='SC', password='wjddnjs0418')
 
+        self.user_SC.is_staff = True
+        self.user_SC.save()
+
         self.category_programming = Category.objects.create(name='programming', slug='programming')
         self.category_music = Category.objects.create(name='music', slug='music')
 
@@ -191,10 +194,14 @@ class TestView(TestCase):
         #로그인 하지 않으면 status code가 200이면 안됨
         response = self.client.get('/blog/create_post/')
         self.assertNotEqual(response.status_code, 200)
+
+        #staff가 아닌 PG가 로그인을 한다.
+        self.client.login(username='PG', password='wjddnjs0418')
+        response=self.client.get('/blog/create_post/')
+        self.assertNotEqual(response.status_code, 200)
         
-        #로그인을 한다.
-        self.client.login(username= 'PG', password='wjddnjs0418') #위의 setup함수에서 만들었던 사용자의 이름과 패스워드인지 검사
-        
+        #staff인 SC가 로그인을 한다.
+        self.client.login(username= 'SC', password='wjddnjs0418') #위의 setup함수에서 만들었던 사용자의 이름과 패스워드인지 검사
         response = self.client.get('/blog/create_post/')
         self.assertEqual(response.status_code, 200)
         soup = BeautifulSoup(response.content, 'html.parser')
