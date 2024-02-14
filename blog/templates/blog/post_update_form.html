@@ -7,6 +7,10 @@
     <form method = "post" enctype="multipart/form-data">{%csrf_token%} <!--form태그를 이용해서 사용자값을 서버로 보냄  post방식으로 보냄-->
         <table>
             {{form}}
+            <tr>
+                <th><label for ="id_tags_str">Tags:</label></th>
+                <td><input type = "text" name="tags_str" id="id_tags_str" value="{{tags_str_default}}"></input></td>
+            </tr>
         </table>
         <button type="submit" class="btn btn-primary float-right">Submit</button>
     </form>
