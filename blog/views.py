@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Category, Tag
 from django.core.exceptions import PermissionDenied
+from django.utils.text import slugify
 
 class PostList(ListView):
     model = Post
@@ -71,7 +72,24 @@ class PostCreate(LoginRequiredMixin,UserPassesTestMixin,CreateView):
         current_user = self.request.user #웹사이트의 방문자
         if current_user.is_authenticated and (current_user.is_staff or current_user.is_superuser):    #로그인 된 경우
             form.instance.author = current_user
-            return super(PostCreate, self).form_valid(form) #새로 작성한 포스트의 author필드에 현재 방문자 담기
+            response = super(PostCreate, self).form_valid(form)  #from_valid결과값을 임시 저장
+
+            tags_str = self.request.POST.get('tags_str') #post_form.html에서 tags_str의 input값 가져오기
+            if tags_str:               #태그가 존재한다면  처리해줘야함
+                tags_str = tags_str.strip() #태그 각자 분리후 , ; 모두 구분자로 처리
+
+                tags_str  =tags_str.replace(',', ';')
+                tags_list = tags_str.split(';')
+
+                for t in tags_list:
+                    t = t.strip()  #각 태그의 앞뒤 공백 제거
+                    tag, is_tag_created = Tag.objects.get_or_create(name=t) #tag에 tag모델의 인스턴스 is~에 인스턴스 생성되었는지 부울값 저장
+                    if is_tag_created:  #새로 생성하였다면 slug값 생성
+                        tag.slug = slugify(t, allow_unicode=True) #한글도 허용
+                        tag.save()
+                    self.object.tags.add(tag) #새로운 포스트에 태그 추가
+            return response
+
         else:
             return redirect('/blog/') #로그인 안된 경우는 원래 블로그 페이지로 돌려 보내기
 
