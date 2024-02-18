@@ -78,7 +78,7 @@ class PostCreate(LoginRequiredMixin,UserPassesTestMixin,CreateView):
             if tags_str:               #태그가 존재한다면  처리해줘야함
                 tags_str = tags_str.strip() #태그 각자 분리후 , ; 모두 구분자로 처리
 
-                tags_str  =tags_str.replace(',', ';')
+                tags_str =tags_str.replace(',', ';')
                 tags_list = tags_str.split(';')
 
                 for t in tags_list:

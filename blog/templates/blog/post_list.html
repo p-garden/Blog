@@ -3,7 +3,8 @@
 
         {%if user.is_authenticated %}
             {% if user.is_superuser or user.is_staff %}
-<a class = "btn btn-info btn-sm float-right" href="/blog/create_post/" role="button"> <i class = "fas fa-pen"> </i>&nbsp;&nbsp;New Post</a>
+                <a class = "btn btn-info btn-sm float-right" href="/blog/create_post/"
+                   role="button"> <i class = "fas fa-pen"> </i>&nbsp;&nbsp;New Post</a>
             {%endif%}
         {%endif%}
 
