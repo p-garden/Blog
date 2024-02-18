@@ -144,7 +144,59 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
-SITE_ID = 1
+SITE_ID = 2
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION= 'none'
 LOGIN_REDIRECT_URL = '/blog/'
+"""
+SOCIALACCOUNT_PROVIDERS = {
+
+"google": {
+
+"APP": {
+
+"client_id": os.getenv("GOOGLE_CLIENT_ID"),
+
+"secret": os.getenv("GOOGLE_SECRET_KEY"),
+
+"key": ""
+
+},
+
+# These are provider-specific settings that can only be
+
+# listed here:
+
+"SCOPE": [
+
+"profile",
+
+"email",
+
+],
+
+"AUTH_PARAMS": {
+
+"access_type": "online",
+
+}
+
+}
+}
+"""
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'APP': {
+            'client_id': '471249344602-i1hq4heb43tp336b8ve7hhio7opp185k.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    }
+}
