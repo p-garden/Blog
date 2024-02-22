@@ -10,6 +10,7 @@ from django.utils.text import slugify
 class PostList(ListView):
     model = Post
     ordering = '-pk' #게시물 최신 순으로 보기 설정
+    paginate_by = 5
     #template_name = 'blog/post_list.html'
 
     def get_context_data(self, **kwargs):
@@ -165,7 +166,7 @@ class CommentUpdate(LoginRequiredMixin, UpdateView):
             return super(CommentUpdate, self).dispatch(request, *args, **kwargs)
         else:
             raise PermissionDenied
-        
+
 def delete_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     post = comment.post
@@ -174,7 +175,7 @@ def delete_comment(request, pk):
         return redirect(post.get_absolute_url())
     else:
         raise PermissionDenied
-# Create your views here.
+# Create your views here
 """def index(request):
     posts = Post.objects.all().order_by('-pk') #최신순으로 보기
     return render(
