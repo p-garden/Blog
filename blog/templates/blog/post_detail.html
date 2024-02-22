@@ -96,10 +96,17 @@
                                  <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
                                  </div>
                                     <div class="ms-3">
+                                        {%if user.is_authenticated and comment.author == user %}
+                                            <a role="button" class="btn btn-sm btn-info float-right" id="comment-{{comment.pk}}-update-btn"
+                                            href="/blog/update_comment/{{comment.pk}}/"> edit </a>
+                                        {%endif%}
                                         <div class="fw-bold">{{comment.author.username}} &nbsp;&nbsp;
                                             <small class="text-muted">{{comment.created_at}}</small>
                                         </div>
                                         <p> {{comment.content | linebreaks}} </p>
+                                        {%if comment.created_at != comment.modified_at %}
+                                        <p class="text-muted float-right"><small>Updated: {{comment.modified_at}}</small></p>
+                                        {%endif%}
                                     </div>
                              </div>
                         {%endfor%}
