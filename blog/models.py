@@ -57,6 +57,13 @@ class Post(models.Model):
     def get_content_markdown(self):
         return markdown(self.content)
 
+    def get_avatar_url(self):
+        if self.author.socialaccount_set.exists():
+            return self.author.socialccount_set.first().get_avatar_url()
+        else:
+            return f'https://doitdjango.com/avatar/id/2052/191de7d326bcd31b/svg/{self.author.email}'
+
+
 class Comment(models.Model):
     post=models.ForeignKey(Post, on_delete=models.CASCADE)
     author = models.ForeignKey(User,on_delete=models.CASCADE)
