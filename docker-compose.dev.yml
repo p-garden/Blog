@@ -1,0 +1,31 @@
+#도커 컴포즈 최신파일 사용
+version: '3'
+
+
+services:
+  #web이라는 이름의 서비스를 실행
+  web:
+    #현재 폴더를 build함 ->Dockefbuild를 이용해서 컨테이너 이미지 만들기
+    build: .
+    #서버 실행 명령어
+    command: gunicorn do_it_django_prj.wsgi:application --bind 0.0.0.0:8000
+    #컴퓨터의 폴더와 도커 연결
+    volumes:
+      - ./:/usr/src/app/
+    #8000번 포트 사용
+    ports:
+      - 8000:8000
+    #오류메세지를 다른사람에게 보이지 않도록 관리
+    env_file:
+      - ./.env.prod
+
+    depends_on:
+      - db
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.prod.db
+volumes:
+  postgres_data:
