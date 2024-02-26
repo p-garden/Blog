@@ -19,13 +19,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-epw^o)-o08lb-#ji*#jzvd0af@o1kw_ri3xzb)umkfn#(k^pa6"
+# 기본값을 설정합니다.
+SECRET_KEY = os.environ.get('SECRET_KEY', "django-insecure-epw^o)-o08lb-#ji*#jzvd0af@o1kw_ri3xzb)umkfn#(k^pa6")
+DEBUG = int(os.environ.get('DEBUG', 1))  # DEBUG 값을 정수로 변환합니다.
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG가 0이 아닌 경우에만 ALLOWED_HOSTS를 설정합니다.
+if os.environ.get('DJANGO_ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
+else:
+    ALLOWED_HOSTS = []
 
-ALLOWED_HOSTS = []
+# DJANGO_ALLOWED_HOSTS 환경 변수가 설정된 경우 ALLOWED_HOSTS를 덮어쓰기합니다.
+if os.environ.get('DJANGO_ALLOWED_HOSTS'):
+    ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
+
 
 
 # Application definition
