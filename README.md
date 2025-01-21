@@ -1,2 +1,3 @@
-# doit_django
-Do It Django!
+# Blog
+자유롭게 블로그를 꾸밀 수 있는 블로그 사이트 제작
+블로그 형식 
